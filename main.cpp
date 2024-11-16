@@ -39,39 +39,45 @@ int main(int argc, char const *argv[])
 
             int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
 
-            //
+            // 45% chance a car joins the lane
             if(event <= 45){
+                // Adds a car to the back of the lane
                 vehicles.push_back(Car());
                 cout << "Joined lane: ";
-                vehicles.back().print();
+                vehicles.back().print(); // Prints the recently added car
 
-                // Prints the Queue
+                // Prints the all the vehicles in the lane
                 cout << "Queue:" << endl;
                 printVehicles();
             }
+            // 55% chance a car pays the toll leaving the lane
             else {
+                // Removes a car from the front of the lane
                 cout << "Car paid: ";
-                vehicles.front().print();
+                vehicles.front().print(); // Prints the car before its removed
                 vehicles.pop_front();
+
+                // Prints the all the vehicles in the lane
                 cout << "Queue:" << endl;
                 printVehicles();
             }
 
-            start = high_resolution_clock::now();
-            timeOperations++;
+            start = high_resolution_clock::now(); // Resets the duration timer
+            timeOperations++; // Iterates how many time operations have occured
         }
     }
 
     return 0;
 }
 
+/// @brief Prints all the vehicles in our deque with '\t' before all descriptions. If the dequeue is empty prints empty
 void printVehicles(){
+    // Our iterators to go through our dequeue
     deque<Car>::iterator begin = vehicles.begin();
     deque<Car>::iterator end = vehicles.end();
 
-    if(begin == end){
-        cout << "\tEmpty" << endl;
-    }
+    // Checks if our dequeue is empty
+    if(begin == end) {cout << "\tEmpty" << endl;}
 
     while(begin != end){
         cout << "\t";
