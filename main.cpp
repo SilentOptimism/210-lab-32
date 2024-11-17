@@ -14,18 +14,15 @@ int timeOperations = 0;
 
 int main(int argc, char const *argv[])
 {
-    array<deque<Car>,4> lanes; // The array holding our landes
     srand(time(NULL));
+    array<deque<Car>,4> lanes; // The array holding our lanes
 
     cout << "Initial queue:" << endl;
+    init_lanes(lanes);
 
-
-    // Starts of our timers
     time_point start = high_resolution_clock::now();
     time_point now = high_resolution_clock::now();
-
-    // Keeps running through out the loop until the lane is empty
-    while(!vehicles.empty()){
+    while(true){
         now = high_resolution_clock::now(); // gets up to date time
         milliseconds duration = duration_cast<milliseconds>(now-start); // Gets up to date duration since last time based operation
 
@@ -34,7 +31,8 @@ int main(int argc, char const *argv[])
             // Iterates how many time op's there have been
             cout << "Time " << timeOperations+1 << " Operation: ";
 
-            
+
+
 
             start = high_resolution_clock::now(); // Resets the duration timer
             timeOperations++; // Iterates how many time operations have occured
@@ -44,15 +42,16 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void init_lanes(){
-
+void init_lanes(array<deque<Car>,4> &lanes){
+    for(deque<Car> vehicles: lanes)
+        for (int i = 0; i < rand()%4; i++) 
+            vehicles.push_back(Car());
 };
 
-void update_lanes()(array<deque<Car>,4> &lanes){
+void update_lanes(array<deque<Car>,4> &lanes){
     int currentLane = 0;
 
     for(deque<Car> vehicles: lanes){
-
         int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
 
         // 39% chance a car joins the lane
@@ -83,7 +82,8 @@ void update_lanes()(array<deque<Car>,4> &lanes){
 
             lanes.at(currentLane).push_back(temp);
         }
-        currentLane++;
+
+        currentLane++; // Iterates our current lane
     }
 }
 
