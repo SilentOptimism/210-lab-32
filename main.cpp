@@ -9,7 +9,7 @@ using namespace chrono;
 
 void print_vehicles(deque<Car>&);
 void print_lanes(array<deque<Car>,4>&);
-bool update_lanes(array<deque<Car>,4>&);
+void update_lanes(array<deque<Car>,4>&);
 void init_lanes(array<deque<Car>,4>&);
 
 int timeOperations = 0;
@@ -27,7 +27,7 @@ int main(int argc, char const *argv[])
     time_point start = high_resolution_clock::now();
     time_point now = high_resolution_clock::now();
 
-    while(true){
+    while(timeOperations<20){
         // Gets time in milliseconds from our timer 
         now = high_resolution_clock::now(); 
         milliseconds duration = duration_cast<milliseconds>(now-start); 
@@ -54,24 +54,32 @@ void init_lanes(array<deque<Car>,4> &lanes){
             vehicles.push_back(Car());
 };
 
-bool update_lanes(array<deque<Car>,4> &lanes){
+void update_lanes(array<deque<Car>,4> &lanes){
     int currentLane = 0;
-    int chanceJoin = 39;
-    int chanceLeave = 39;
+    
+    int chanceJoin = 39, chanceLeave = 46, chanceSwitch = 15; // The percent chance of something happening when a lane isn't empty
+    int chanceJoinEmpty = 50 ; // The percent chance of something happening when a lane is empty
 
     for(deque<Car> &vehicles: lanes){
         cout << "Lane " << currentLane+1 << " ";
         int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
 
+        if(vehicles.empty()){
+            if(event <= chanceJoinEmpty){
+                vehicles.push_back(Car());
+            }
+        }
+        
+        
         // 39% chance a car joins the lane
-        if(event <= 39){
+        if(event <= chanceJoin){
             // Adds a car to the back of the lane
             vehicles.push_back(Car());
             cout << "Joined: ";
             vehicles.back().print(); // Prints the recently added car
         }
         // 46% chance a car pays the toll leaving the lane
-        else if(event<= 39+46) {
+        else if(event<= chanceJoin + chanceLeave) {
             // Removes a car from the front of the lane
             cout << "Car paid: ";
             vehicles.front().print(); // Prints the car before its removed
