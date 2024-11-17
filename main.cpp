@@ -7,26 +7,18 @@
 using namespace std;
 using namespace chrono;
 
-void printVehicles();
+void printVehicles(deque<Car> vehicles);
+void processLanes(array<deque<Car>, 4> lanes);
 
-deque<Car> vehicles; // The queue storing all of our vehicles
-array<deque<Car>,4> lanes; // The array holding our landes
 int timeOperations = 0;
-
-
-
 
 int main(int argc, char const *argv[])
 {
+    array<deque<Car>,4> lanes; // The array holding our landes
     srand(time(NULL));
 
     cout << "Initial queue:" << endl;
 
-    // Sets up our 2 initial vehicles in the line
-    vehicles.push_back(Car());
-    vehicles.back().print();
-    vehicles.push_back(Car());
-    vehicles.back().print();
 
     // Starts of our timers
     time_point start = high_resolution_clock::now();
@@ -52,7 +44,11 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-string processLanes(array<deque<Car>,4> lanes){
+void init_lanes(){
+
+};
+
+void update_lanes()(array<deque<Car>,4> &lanes){
     int currentLane = 0;
 
     for(deque<Car> vehicles: lanes){
@@ -77,24 +73,31 @@ string processLanes(array<deque<Car>,4> lanes){
         else{
             cout << "Switches: ";
 
-            Car temp = vehicles.front();
-            vehicles.pop_front();
-            temp.print();
+            Car temp = vehicles.back(); // Gets newest car
+            vehicles.pop_back(); // Removes newest car;
+            temp.print(); // Prints the car thats moving
             
-            int nextLane = rand()% 4 + 1;
-            while(nextLane != currentLane){
-                lanes.at(currentLane).push_back(temp);
+            // Gets the new lane and make's sure its not the same as the current lane
+            int newLane = rand()% 4; 
+            while(newLane != currentLane) {newLane = rand() % 4 ;}
 
-            }
-
-
+            lanes.at(currentLane).push_back(temp);
         }
         currentLane++;
     }
 }
 
 /// @brief Prints all the vehicles in our deque with '\t' before all descriptions. If the dequeue is empty prints empty
-void printVehicles(){
+void print_vehicles(deque<Car> &vehicles){
+    /*
+    // Better option allows us to make the print function constant
+    if(vehicles.empty()) {cout << "\t Empty" << endl;}
+
+    for(Car vehicle: vehicles){
+        vehicle.print();
+    }
+    */
+
     // Our iterators to go through our dequeue
     deque<Car>::iterator begin = vehicles.begin();
     deque<Car>::iterator end = vehicles.end();
