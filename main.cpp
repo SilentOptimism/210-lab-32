@@ -9,7 +9,7 @@ using namespace chrono;
 
 void print_vehicles(deque<Car>&);
 void print_lanes(array<deque<Car>,4>&);
-void update_lanes(array<deque<Car>,4>&);
+bool update_lanes(array<deque<Car>,4>&);
 void init_lanes(array<deque<Car>,4>&);
 
 int timeOperations = 0;
@@ -34,6 +34,7 @@ int main(int argc, char const *argv[])
 
         // Checks if the timer has hit 1000 milliseconds 
         if(duration.count() > 1000){
+            cout << endl;
             cout << "Time " << timeOperations+1 << " Operation: ";
 
             update_lanes(lanes);
@@ -48,15 +49,18 @@ int main(int argc, char const *argv[])
 }
 
 void init_lanes(array<deque<Car>,4> &lanes){
-    for(deque<Car> vehicles: lanes)
-        for (int i = 0; i < rand()%4; i++) 
+    for(deque<Car> &vehicles: lanes)
+        for (int i = 0; i <= rand()%4; i++) 
             vehicles.push_back(Car());
 };
 
-void update_lanes(array<deque<Car>,4> &lanes){
+bool update_lanes(array<deque<Car>,4> &lanes){
     int currentLane = 0;
+    int chanceJoin = 39;
+    int chanceLeave = 39;
 
-    for(deque<Car> vehicles: lanes){
+    for(deque<Car> &vehicles: lanes){
+        cout << "Lane " << currentLane+1 << " ";
         int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
 
         // 39% chance a car joins the lane
@@ -117,12 +121,13 @@ void print_vehicles(deque<Car> &vehicles){
     deque<Car>::iterator end = vehicles.end();
 
     // Checks if our dequeue is empty
-    if(begin == end) {cout << "\tEmpty" << endl;}
+    if(begin == end) {
+        cout << "\tEmpty" << endl;
+    }
 
     while(begin != end){
         cout << "\t";
         begin->print();
         begin++;
     }
-
 }
