@@ -7,35 +7,40 @@
 using namespace std;
 using namespace chrono;
 
-void printVehicles(deque<Car> vehicles);
-void processLanes(array<deque<Car>, 4> lanes);
+void print_vehicles(deque<Car>&);
+void print_lanes(array<deque<Car>,4>&);
+void update_lanes(array<deque<Car>,4>&);
+void init_lanes(array<deque<Car>,4>&);
 
 int timeOperations = 0;
 
 int main(int argc, char const *argv[])
 {
     srand(time(NULL));
-    array<deque<Car>,4> lanes; // The array holding our lanes
 
     cout << "Initial queue:" << endl;
-    init_lanes(lanes);
+    array<deque<Car>,4> lanes; 
+    init_lanes(lanes); 
+    print_lanes(lanes); 
 
+    // Initalizes our timer
     time_point start = high_resolution_clock::now();
     time_point now = high_resolution_clock::now();
-    while(true){
-        now = high_resolution_clock::now(); // gets up to date time
-        milliseconds duration = duration_cast<milliseconds>(now-start); // Gets up to date duration since last time based operation
 
-        // Checks if 1 second has pased since the last operation
+    while(true){
+        // Gets time in milliseconds from our timer 
+        now = high_resolution_clock::now(); 
+        milliseconds duration = duration_cast<milliseconds>(now-start); 
+
+        // Checks if the timer has hit 1000 milliseconds 
         if(duration.count() > 1000){
-            // Iterates how many time op's there have been
             cout << "Time " << timeOperations+1 << " Operation: ";
 
+            update_lanes(lanes);
+            print_lanes(lanes);
 
-
-
-            start = high_resolution_clock::now(); // Resets the duration timer
-            timeOperations++; // Iterates how many time operations have occured
+            start = high_resolution_clock::now(); // Resets the timer
+            timeOperations++; 
         }
     }
 
@@ -87,7 +92,16 @@ void update_lanes(array<deque<Car>,4> &lanes){
     }
 }
 
-/// @brief Prints all the vehicles in our deque with '\t' before all descriptions. If the dequeue is empty prints empty
+void print_lanes(array<deque<Car>, 4> &lanes){
+    int laneNumber = 0;
+    for(deque<Car> vehicles: lanes){
+        laneNumber++;
+        cout << "Lane " << laneNumber << ":"<< endl;
+        print_vehicles(vehicles);
+    }
+
+}
+
 void print_vehicles(deque<Car> &vehicles){
     /*
     // Better option allows us to make the print function constant
