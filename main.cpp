@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <deque>
+#include <array>
 #include "Car-1.h"
 
 using namespace std;
@@ -9,7 +10,11 @@ using namespace chrono;
 void printVehicles();
 
 deque<Car> vehicles; // The queue storing all of our vehicles
+array<deque<Car>,4> lanes; // The array holding our landes
 int timeOperations = 0;
+
+
+
 
 int main(int argc, char const *argv[])
 {
@@ -37,30 +42,7 @@ int main(int argc, char const *argv[])
             // Iterates how many time op's there have been
             cout << "Time " << timeOperations+1 << " Operation: ";
 
-            int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
-
-            // 45% chance a car joins the lane
-            if(event <= 45){
-                // Adds a car to the back of the lane
-                vehicles.push_back(Car());
-                cout << "Joined lane: ";
-                vehicles.back().print(); // Prints the recently added car
-
-                // Prints the all the vehicles in the lane
-                cout << "Queue:" << endl;
-                printVehicles();
-            }
-            // 55% chance a car pays the toll leaving the lane
-            else {
-                // Removes a car from the front of the lane
-                cout << "Car paid: ";
-                vehicles.front().print(); // Prints the car before its removed
-                vehicles.pop_front();
-
-                // Prints the all the vehicles in the lane
-                cout << "Queue:" << endl;
-                printVehicles();
-            }
+            
 
             start = high_resolution_clock::now(); // Resets the duration timer
             timeOperations++; // Iterates how many time operations have occured
@@ -68,6 +50,27 @@ int main(int argc, char const *argv[])
     }
 
     return 0;
+}
+
+string processLanes(array<deque<Car>,4> lanes){
+    deque<Car> vehicles;
+    int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
+
+            // 45% chance a car joins the lane
+            if(event <= 45){
+                // Adds a car to the back of the lane
+                vehicles.push_back(Car());
+                cout << "Joined: ";
+                vehicles.back().print(); // Prints the recently added car
+            }
+            // 55% chance a car pays the toll leaving the lane
+            else {
+                // Removes a car from the front of the lane
+                cout << "Car paid: ";
+                vehicles.front().print(); // Prints the car before its removed
+                vehicles.pop_front();
+            }
+
 }
 
 /// @brief Prints all the vehicles in our deque with '\t' before all descriptions. If the dequeue is empty prints empty
