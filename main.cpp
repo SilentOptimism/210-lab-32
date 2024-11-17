@@ -53,24 +53,44 @@ int main(int argc, char const *argv[])
 }
 
 string processLanes(array<deque<Car>,4> lanes){
-    deque<Car> vehicles;
-    int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
+    int currentLane = 0;
 
-            // 45% chance a car joins the lane
-            if(event <= 45){
-                // Adds a car to the back of the lane
-                vehicles.push_back(Car());
-                cout << "Joined: ";
-                vehicles.back().print(); // Prints the recently added car
-            }
-            // 55% chance a car pays the toll leaving the lane
-            else {
-                // Removes a car from the front of the lane
-                cout << "Car paid: ";
-                vehicles.front().print(); // Prints the car before its removed
-                vehicles.pop_front();
+    for(deque<Car> vehicles: lanes){
+
+        int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
+
+        // 39% chance a car joins the lane
+        if(event <= 39){
+            // Adds a car to the back of the lane
+            vehicles.push_back(Car());
+            cout << "Joined: ";
+            vehicles.back().print(); // Prints the recently added car
+        }
+        // 46% chance a car pays the toll leaving the lane
+        else if(event<= 39+46) {
+            // Removes a car from the front of the lane
+            cout << "Car paid: ";
+            vehicles.front().print(); // Prints the car before its removed
+            vehicles.pop_front();
+        }
+        // 15% chance a car pays the toll leaving the lane
+        else{
+            cout << "Switches: ";
+
+            Car temp = vehicles.front();
+            vehicles.pop_front();
+            temp.print();
+            
+            int nextLane = rand()% 4 + 1;
+            while(nextLane != currentLane){
+                lanes.at(currentLane).push_back(temp);
+
             }
 
+
+        }
+        currentLane++;
+    }
 }
 
 /// @brief Prints all the vehicles in our deque with '\t' before all descriptions. If the dequeue is empty prints empty
