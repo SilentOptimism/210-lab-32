@@ -18,6 +18,7 @@ int main(int argc, char const *argv[])
 {
     srand(time(NULL));
 
+    // Initializes our lanes and prints them out
     cout << "Initial queue:" << endl;
     array<deque<Car>,4> lanes; 
     init_lanes(lanes); 
@@ -27,8 +28,8 @@ int main(int argc, char const *argv[])
     time_point start = high_resolution_clock::now();
     time_point now = high_resolution_clock::now();
 
+    // Run our program for 20 time operations
     while(timeOperations<20){
-        // Gets time in milliseconds from our timer 
         now = high_resolution_clock::now(); 
         milliseconds duration = duration_cast<milliseconds>(now-start); 
 
@@ -44,10 +45,11 @@ int main(int argc, char const *argv[])
             timeOperations++; 
         }
     }
-
     return 0;
 }
 
+/// @brief Initializes an array of 4 deque<Car> with each deque having 1-4 cars
+/// @param lanes The array of deque<Car> that will be initialized
 void init_lanes(array<deque<Car>,4> &lanes){
     for(deque<Car> &vehicles: lanes)
         for (int i = 0; i <= rand()%4; i++) 
