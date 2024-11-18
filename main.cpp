@@ -35,7 +35,7 @@ int main(int argc, char const *argv[])
         // Checks if the timer has hit 1000 milliseconds 
         if(duration.count() > 1000){
             cout << endl;
-            cout << "Time " << timeOperations+1 << " Operation: ";
+            cout << "Time: " << timeOperations+1 << endl;
 
             update_lanes(lanes);
             print_lanes(lanes);
@@ -60,44 +60,47 @@ void update_lanes(array<deque<Car>,4> &lanes){
     int chanceJoin = 39, chanceLeave = 46, chanceSwitch = 15; // The percent chance of something happening when a lane isn't empty
     int chanceJoinEmpty = 50 ; // The percent chance of something happening when a lane is empty
 
+    // Iterates through every lane
     for(deque<Car> &vehicles: lanes){
-        cout << "Lane " << currentLane+1 << " ";
+        cout << "Lane: " << currentLane+1 << " ";
         int event = rand() % 100 + 1; // Determines whether a car will leave or join the line
 
+        // Checks if the lane is empty
         if(vehicles.empty()){
+            // If the lane is empty a (chanceJoinEmpty)% chance of a vehicle joining the lane 
             if(event <= chanceJoinEmpty){
                 vehicles.push_back(Car());
             }
         }
-        
-        
-        // 39% chance a car joins the lane
-        if(event <= chanceJoin){
-            // Adds a car to the back of the lane
-            vehicles.push_back(Car());
-            cout << "Joined: ";
-            vehicles.back().print(); // Prints the recently added car
-        }
-        // 46% chance a car pays the toll leaving the lane
-        else if(event<= chanceJoin + chanceLeave) {
-            // Removes a car from the front of the lane
-            cout << "Car paid: ";
-            vehicles.front().print(); // Prints the car before its removed
-            vehicles.pop_front();
-        }
-        // 15% chance a car pays the toll leaving the lane
         else{
-            cout << "Switches: ";
+            // 39% chance a car joins the lane
+            if(event <= chanceJoin){
+                // Adds a car to the back of the lane
+                vehicles.push_back(Car());
+                cout << "Joined: ";
+                vehicles.back().print(); // Prints the recently added car
+            }
+            // 46% chance a car pays the toll leaving the lane
+            else if(event<= chanceJoin + chanceLeave) {
+                // Removes a car from the front of the lane
+                cout << "Car paid: ";
+                vehicles.front().print(); // Prints the car before its removed
+                vehicles.pop_front();
+            }
+            // 15% chance a car pays the toll leaving the lane
+            else{
+                int newLane = rand()% 4; 
+                while(newLane == currentLane) {newLane = rand() % 4 ;}
+                cout << "Switches to lane " << newLane << ": ";
 
-            Car temp = vehicles.back(); // Gets newest car
-            vehicles.pop_back(); // Removes newest car;
-            temp.print(); // Prints the car thats moving
-            
-            // Gets the new lane and make's sure its not the same as the current lane
-            int newLane = rand()% 4; 
-            while(newLane != currentLane) {newLane = rand() % 4 ;}
+                Car temp = vehicles.back(); // Gets newest car
+                vehicles.pop_back(); // Removes newest car;
+                temp.print(); // Prints the car thats moving
+                
+                // Gets the new lane and make's sure its not the same as the current lane
 
-            lanes.at(currentLane).push_back(temp);
+                lanes.at(currentLane).push_back(temp);
+            }
         }
 
         currentLane++; // Iterates our current lane
@@ -108,7 +111,7 @@ void print_lanes(array<deque<Car>, 4> &lanes){
     int laneNumber = 0;
     for(deque<Car> vehicles: lanes){
         laneNumber++;
-        cout << "Lane " << laneNumber << ":"<< endl;
+        cout << "Lane " << laneNumber << " Queue:"<< endl;
         print_vehicles(vehicles);
     }
 
