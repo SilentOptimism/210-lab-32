@@ -70,6 +70,10 @@ void update_lanes(array<deque<Car>,4> &lanes){
             // If the lane is empty a (chanceJoinEmpty)% chance of a vehicle joining the lane 
             if(event <= chanceJoinEmpty){
                 vehicles.push_back(Car());
+                cout << "Joined: ";
+                vehicles.back().print();
+            }else{
+                cout << "Empty" << endl;
             }
         }
         else{
@@ -91,7 +95,8 @@ void update_lanes(array<deque<Car>,4> &lanes){
             else{
                 int newLane = rand()% 4; 
                 while(newLane == currentLane) {newLane = rand() % 4 ;}
-                cout << "Switches to lane " << newLane << ": ";
+
+                cout << "Switched: ";
 
                 Car temp = vehicles.back(); // Gets newest car
                 vehicles.pop_back(); // Removes newest car;
@@ -99,7 +104,7 @@ void update_lanes(array<deque<Car>,4> &lanes){
                 
                 // Gets the new lane and make's sure its not the same as the current lane
 
-                lanes.at(currentLane).push_back(temp);
+                lanes.at(newLane).push_back(temp);
             }
         }
 
@@ -107,38 +112,22 @@ void update_lanes(array<deque<Car>,4> &lanes){
     }
 }
 
-void print_lanes(array<deque<Car>, 4> &lanes){
+void print_lanes(const array<deque<Car>, 4> &lanes){
     int laneNumber = 0;
+
+    // Iterates through lanes and prints each dequeue<Car> queue
     for(deque<Car> vehicles: lanes){
         laneNumber++;
         cout << "Lane " << laneNumber << " Queue:"<< endl;
         print_vehicles(vehicles);
     }
-
 }
 
-void print_vehicles(deque<Car> &vehicles){
-    /*
+void print_vehicles(const deque<Car> &vehicles){
     // Better option allows us to make the print function constant
     if(vehicles.empty()) {cout << "\t Empty" << endl;}
 
     for(Car vehicle: vehicles){
         vehicle.print();
-    }
-    */
-
-    // Our iterators to go through our dequeue
-    deque<Car>::iterator begin = vehicles.begin();
-    deque<Car>::iterator end = vehicles.end();
-
-    // Checks if our dequeue is empty
-    if(begin == end) {
-        cout << "\tEmpty" << endl;
-    }
-
-    while(begin != end){
-        cout << "\t";
-        begin->print();
-        begin++;
     }
 }
