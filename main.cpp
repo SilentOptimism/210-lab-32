@@ -7,8 +7,8 @@
 using namespace std;
 using namespace chrono;
 
-void print_vehicles(deque<Car>&);
-void print_lanes(array<deque<Car>,4>&);
+void print_vehicles(const deque<Car>&);
+void print_lanes(const array<deque<Car>,4>&);
 void update_lanes(array<deque<Car>,4>&);
 void init_lanes(array<deque<Car>,4>&);
 
@@ -35,8 +35,7 @@ int main(int argc, char const *argv[])
 
         // Checks if the timer has hit 1000 milliseconds 
         if(duration.count() > 1000){
-            cout << endl;
-            cout << "Time: " << timeOperations+1 << endl;
+            cout << "\nTime: " << timeOperations+1 << endl;
 
             update_lanes(lanes);
             print_lanes(lanes);
@@ -48,14 +47,16 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-/// @brief Initializes an array of 4 deque<Car> with each deque having 1-4 cars
-/// @param lanes The array of deque<Car> that will be initialized
+/// @brief Initializes our Lanes
+/// @param lanes The lanes that will be initialized
 void init_lanes(array<deque<Car>,4> &lanes){
     for(deque<Car> &vehicles: lanes)
         for (int i = 0; i <= rand()%4; i++) 
             vehicles.push_back(Car());
 };
 
+/// @brief Updates our lanes. 39% chance car joins. 46% car leaves. 15% car switches lane. If a lane is empty it has a 50% chance for a car to join its lane.
+/// @param lanes This lanes array will be modified/updated.
 void update_lanes(array<deque<Car>,4> &lanes){
     int currentLane = 0;
     
@@ -114,6 +115,8 @@ void update_lanes(array<deque<Car>,4> &lanes){
     }
 }
 
+/// @brief It Prints the lanes to the terminal. Does not modify lanes
+/// @param lanes These lanes will be printed not modified.
 void print_lanes(const array<deque<Car>, 4> &lanes){
     int laneNumber = 0;
 
@@ -125,11 +128,14 @@ void print_lanes(const array<deque<Car>, 4> &lanes){
     }
 }
 
+/// @brief It Prints all the cars in a deque to the terminal. Does not modify the deque
+/// @param vehicles These vehicles will be printed not modified
 void print_vehicles(const deque<Car> &vehicles){
     // Better option allows us to make the print function constant
     if(vehicles.empty()) {cout << "\t Empty" << endl;}
 
     for(Car vehicle: vehicles){
+        cout << '\t';
         vehicle.print();
     }
 }
